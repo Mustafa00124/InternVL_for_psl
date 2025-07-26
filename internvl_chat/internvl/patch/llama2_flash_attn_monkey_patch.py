@@ -6,10 +6,17 @@ import warnings
 from typing import Optional, Tuple
 
 import torch
-from flash_attn import __version__ as flash_attn_version
-from flash_attn.bert_padding import pad_input, unpad_input
-from flash_attn.flash_attn_interface import (flash_attn_func,
-                                             flash_attn_varlen_kvpacked_func)
+try:
+    from flash_attn import __version__ as flash_attn_version
+    from flash_attn.bert_padding import pad_input, unpad_input
+    from flash_attn.flash_attn_interface import (
+        flash_attn_func,
+        flash_attn_varlen_kvpacked_func,
+    )
+except ImportError:
+    flash_attn_version = None
+    pad_input = unpad_input = flash_attn_func = flash_attn_varlen_kvpacked_func = None
+    print("[WARNING] flash_attn not available. Falling back to default attention.")
 from transformers.models.llama.modeling_llama import (LlamaAttention,
                                                       LlamaModel, rotate_half)
 
