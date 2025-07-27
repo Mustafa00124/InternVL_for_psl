@@ -23,44 +23,45 @@ mkdir -p "$OUTPUT_DIR"
 TRAIN_SCRIPT="/content/InternVL_for_psl/internvl_chat/internvl/train/internvl_chat_finetune.py"
 
 # Combine all arguments into a single command
-FULL_COMMAND="torchrun --nnodes=1 --node_rank=0 --master_addr=127.0.0.1 --nproc_per_node=${GPUS} --master_port=${MASTER_PORT} \
-'$TRAIN_SCRIPT' \
---model_name_or_path 'OpenGVLab/InternVL2_5-1B' \
---conv_style 'internvl2_5' \
---use_fast_tokenizer False \
---output_dir '$OUTPUT_DIR' \
---meta_path '/content/drive/MyDrive/psl_dataset_train.json' \
---overwrite_output_dir \
---force_image_size 448 \
---max_dynamic_patch 6 \
---down_sample_ratio 0.5 \
---drop_path_rate 0.0 \
---freeze_llm \
---freeze_mlp \
---freeze_backbone \
---use_llm_lora 16 \
---vision_select_layer -1 \
---dataloader_num_workers 2 \
---bf16 \
---num_train_epochs 1 \
---per_device_train_batch_size ${PER_DEVICE_BATCH_SIZE} \
---gradient_accumulation_steps ${GRADIENT_ACC} \
---evaluation_strategy 'no' \
---save_strategy 'steps' \
---save_steps 200 \
---save_total_limit 1 \
---learning_rate 4e-5 \
---weight_decay 0.01 \
---warmup_ratio 0.03 \
---lr_scheduler_type 'cosine' \
---logging_steps 1 \
---max_seq_length 8192 \
---do_train \
---grad_checkpoint \
---group_by_length \
---dynamic_image_size \
---use_thumbnail \
---ps_version 'v2'"
+FULL_COMMAND="torchrun --nnodes=1 --node_rank=0 --master_addr=127.0.0.1 \
+  --nproc_per_node=1 --master_port=34229 \
+  "/content/InternVL_for_psl/internvl_chat/internvl/train/internvl_chat_finetune.py" \
+  --model_name_or_path "OpenGVLab/InternVL2_5-1B" \
+  --conv_style "internvl2_5" \
+  --use_fast_tokenizer "False" \
+  --output_dir "/content/drive/MyDrive/psl_lora_output" \
+  --meta_path "/content/drive/MyDrive/psl_dataset_train.json" \
+  --overwrite_output_dir "True" \
+  --force_image_size 448 \
+  --max_dynamic_patch 6 \
+  --down_sample_ratio 0.5 \
+  --drop_path_rate 0.0 \
+  --freeze_llm "True" \
+  --freeze_mlp "True" \
+  --freeze_backbone "True" \
+  --use_llm_lora 16 \
+  --vision_select_layer -1 \
+  --dataloader_num_workers 2 \
+  --bf16 "True" \
+  --num_train_epochs 1 \
+  --per_device_train_batch_size 4 \
+  --gradient_accumulation_steps 1 \
+  --evaluation_strategy "no" \
+  --save_strategy "steps" \
+  --save_steps 200 \
+  --save_total_limit 1 \
+  --learning_rate 4e-5 \
+  --weight_decay 0.01 \
+  --warmup_ratio 0.03 \
+  --lr_scheduler_type "cosine" \
+  --logging_steps 1 \
+  --max_seq_length 8192 \
+  --do_train "True" \
+  --grad_checkpoint "True" \
+  --group_by_length "True" \
+  --dynamic_image_size "True" \
+  --use_thumbnail "True" \
+  --ps_version "v2""
 
 # Execute the full command
 echo "Executing command:"
