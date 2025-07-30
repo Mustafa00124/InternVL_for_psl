@@ -45,7 +45,6 @@ torchrun \
   --num_train_epochs 1 \
   --per_device_train_batch_size ${PER_DEVICE_BATCH_SIZE} \
   --gradient_accumulation_steps ${GRADIENT_ACC} \
-  --evaluation_strategy "no" \
   --save_strategy "steps" \
   --save_steps 200 \
   --save_total_limit 1 \
